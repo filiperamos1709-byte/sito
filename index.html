@@ -80,5 +80,23 @@
   </div>
 </main>
 
+<div class="taglio" aria-hidden="true"></div>
+<script>
+// Al clic su una porta: le due lame tagliano lo schermo, poi si apre il link.
+// Ctrl/Cmd/Shift, tasto centrale e "meno movimento" aprono subito, come sempre.
+(function () {
+  var calma = window.matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll('.porta').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      if (calma.matches || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      document.body.classList.add('uscita');
+      setTimeout(function () { window.location.href = a.href; }, 460);
+    });
+  });
+  // tornando indietro (bfcache) la pagina riappare pulita
+  window.addEventListener('pageshow', function () { document.body.classList.remove('uscita'); });
+})();
+</script>
 </body>
 </html>

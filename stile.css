@@ -35,12 +35,21 @@ a { color: inherit; }
 .testata .logo { line-height: 0; }
 .testata .logo img { height: 38px; width: auto; }
 .testata nav a {
+  position: relative; display: inline-block;
   font: italic 800 13px/1 var(--display); text-transform: uppercase; letter-spacing: .04em;
-  text-decoration: none; color: var(--grafite);
-  padding: 10px 2px; border-bottom: 2px solid transparent;
-  transition: border-color .3s var(--esci), color .3s var(--esci);
+  text-decoration: none; color: var(--grafite); padding: 10px 2px;
+  transition: color .25s var(--esci), transform .12s var(--esci);
 }
-.testata nav a:hover { color: var(--arancio-testo); border-color: var(--arancio); }
+/* il filetto si disegna da sinistra */
+.testata nav a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--arancio);
+  transform: scaleX(0); transform-origin: left; transition: transform .35s var(--esci);
+}
+.testata nav a:hover { color: var(--arancio-testo); }
+.testata nav a:hover::after, .testata nav a:focus-visible::after { transform: scaleX(1); }
+.testata nav a:active { transform: translateY(1px); }
+.testata .logo { transition: transform .12s var(--esci); }
+.testata .logo:active { transform: translateY(1px); }
 
 /* ritratto */
 .pagina { display: grid; grid-template-columns: 1fr; }
@@ -71,7 +80,16 @@ a { color: inherit; }
   position: relative; display: grid; grid-template-columns: auto 1fr auto; column-gap: 18px; align-items: start;
   padding: 26px var(--margine) 28px; text-decoration: none; color: var(--grafite);
   border-top: 2px solid var(--grafite); overflow: hidden; isolation: isolate;
+  -webkit-tap-highlight-color: transparent;
 }
+/* il pannello carta entra di taglio, con la pendenza del logo */
+.porta::before {
+  content: ""; position: absolute; inset: 0 -30%; z-index: -2; background: var(--carta);
+  transform: translateX(-101%) skewX(calc(var(--pendenza) * -1));
+  transition: transform .5s var(--esci);
+}
+.porta.far::before { display: none; }
+.testo { transition: transform .45s var(--esci); }
 .porte li:last-child .porta { border-bottom: 2px solid var(--grafite); }
 .num {
   position: relative; font: italic 900 clamp(40px, 11vw, 64px)/.9 var(--display); color: var(--arancio-testo);
@@ -101,6 +119,15 @@ a { color: inherit; }
 .porta:hover .num::before, .porta:focus-visible .num::before, .porta:active .num::before, .porta.far .num::before { transform: skewX(calc(var(--pendenza) * -1)) scaleX(1); }
 .porta:hover .num, .porta:focus-visible .num, .porta:active .num { color: var(--nero); }
 .porta:hover .freccia, .porta:focus-visible .freccia { transform: translateX(6px); }
+@media (hover: hover) {
+  .porta:hover::before { transform: translateX(0) skewX(calc(var(--pendenza) * -1)); }
+  .porta:hover .testo { transform: translateX(6px); }
+}
+.porta:focus-visible::before { transform: translateX(0) skewX(calc(var(--pendenza) * -1)); }
+/* la pressione: il testo spinge, la freccia parte */
+.porta:active .testo { transform: translateX(10px); transition-duration: .12s; }
+.porta:active .freccia { transform: translateX(14px); transition-duration: .12s; }
+.porta:active .num::before { transition-duration: .2s; }
 .porta:focus-visible { outline-offset: -6px; }
 
 /* la prima porta: FAR Training, sul nero */
@@ -123,14 +150,36 @@ a { color: inherit; }
   padding: 34px var(--margine) 40px; font-size: 14px; color: var(--tenue);
 }
 .piede a {
+  position: relative; display: inline-block;
   font: italic 900 20px/1 var(--display); text-transform: uppercase; color: var(--nero);
   text-decoration: none; border-bottom: 2px solid var(--arancio); padding-bottom: 4px;
+  transition: color .25s var(--esci), transform .12s var(--esci);
+}
+/* sopra il filetto arancio passa quello nero */
+.piede a::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--nero);
+  transform: scaleX(0); transform-origin: left; transition: transform .4s var(--esci);
 }
 .piede a:hover { color: var(--arancio-testo); }
+.piede a:hover::after, .piede a:focus-visible::after { transform: scaleX(1); }
+.piede a:active { transform: translateY(1px); }
+.testa { transition: transform .5s var(--esci); }
+.piede:hover .testa { transform: translateX(-4px); }
 .testa { width: 34px; height: auto; }
 
 @keyframes fascia { from { transform: skewX(calc(var(--pendenza) * -1)) scaleX(0); } }
 .porta.far .num::before { animation: fascia .9s .35s var(--esci) backwards; }
+
+/* l'uscita: al clic su una porta due lame, arancio e nera, tagliano lo schermo a 10° */
+.taglio { position: fixed; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; }
+.taglio::before, .taglio::after {
+  content: ""; position: absolute; inset: 0 -40%;
+  transform: translateX(-130%) skewX(calc(var(--pendenza) * -1));
+}
+.taglio::before { background: var(--arancio); }
+.taglio::after { background: var(--nero); }
+.uscita .taglio::before { transform: translateX(0) skewX(calc(var(--pendenza) * -1)); transition: transform .38s cubic-bezier(.7, 0, .25, 1); }
+.uscita .taglio::after { transform: translateX(0) skewX(calc(var(--pendenza) * -1)); transition: transform .38s .08s cubic-bezier(.7, 0, .25, 1); }
 
 /* desktop: il ritratto a sinistra, le porte a destra */
 @media (min-width: 900px) {
@@ -149,6 +198,10 @@ a { color: inherit; }
   .presenta h1 { font-size: 96px; }
 }
 
+/* meno movimento: niente spostamenti né lame; restano i cambi di colore e la fascia, senza corsa */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before { transition: none !important; animation: none !important; }
+  *, *::before, *::after { animation: none !important; transition-property: color, background-color, border-color, opacity !important; }
+  .porta:hover .testo, .porta:active .testo, .porta:hover .freccia, .porta:focus-visible .freccia,
+  .porta:active .freccia, .piede:hover .testa { transform: none; }
+  .taglio { display: none; }
 }
