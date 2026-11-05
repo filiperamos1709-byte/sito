@@ -1,0 +1,154 @@
+/* filiperamos.it · kit di marca Filipe Ramos.
+   Gesso, grafite e l'arancio della marca. Il taglio obliquo del logo (10°) decide ogni taglio. */
+:root {
+  --gesso: #F5F4F1;
+  --carta: #FFFFFF;
+  --grafite: #333333;
+  --nero: #1F1F1F;
+  --tenue: #5C5A57;
+  --filetto: #D9D5CE;
+  --arancio: #EA6411;
+  --arancio-testo: #B54A00;
+  --display: 'Montserrat', sans-serif;
+  --lettura: 'Figtree', system-ui, sans-serif;
+  --pendenza: 10deg;
+  --margine: clamp(16px, 4.5vw, 56px);
+  --esci: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--grafite) var(--gesso); }
+body {
+  margin: 0; background: var(--gesso); color: var(--grafite);
+  font: 400 17px/1.6 var(--lettura); font-variant-numeric: tabular-nums;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; }
+::selection { background: var(--arancio); color: var(--nero); }
+:focus-visible { outline: 3px solid var(--arancio); outline-offset: 3px; }
+
+/* testata */
+.testata {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px var(--margine); border-bottom: 2px solid var(--grafite);
+}
+.testata .logo { line-height: 0; }
+.testata .logo img { height: 38px; width: auto; }
+.testata nav a {
+  font: italic 800 13px/1 var(--display); text-transform: uppercase; letter-spacing: .04em;
+  text-decoration: none; color: var(--grafite);
+  padding: 10px 2px; border-bottom: 2px solid transparent;
+  transition: border-color .3s var(--esci), color .3s var(--esci);
+}
+.testata nav a:hover { color: var(--arancio-testo); border-color: var(--arancio); }
+
+/* ritratto */
+.pagina { display: grid; grid-template-columns: 1fr; }
+.ritratto { position: relative; margin: 0; background: var(--gesso); overflow: hidden; }
+.ritratto img {
+  width: 100%; height: 54svh; min-height: 300px; object-fit: cover; object-position: 50% 16%;
+  filter: grayscale(1) contrast(1.08) brightness(.86);
+}
+/* il bordo basso è tagliato con la pendenza del logo */
+.ritratto::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 17.6vw; max-height: 170px;
+  background: var(--gesso); clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+
+.presenta { padding: 6px var(--margine) 0; position: relative; z-index: 1; }
+.presenta h1 {
+  margin: 0; font: italic 900 clamp(46px, 13.5vw, 96px)/.88 var(--display);
+  text-transform: uppercase; letter-spacing: -0.02em; color: var(--nero);
+}
+.presenta h1 span { color: var(--arancio); display: block; }
+.ruolo { margin: 18px 0 0; max-width: 36ch; font-size: 18px; line-height: 1.5; color: var(--grafite); }
+.ruolo b { color: var(--nero); font-weight: 700; }
+.dove { margin: 10px 0 0; font-size: 14px; color: var(--tenue); }
+
+/* porte */
+.porte { list-style: none; margin: 30px 0 0; padding: 0; }
+.porta {
+  position: relative; display: grid; grid-template-columns: auto 1fr auto; column-gap: 18px; align-items: start;
+  padding: 26px var(--margine) 28px; text-decoration: none; color: var(--grafite);
+  border-top: 2px solid var(--grafite); overflow: hidden; isolation: isolate;
+}
+.porte li:last-child .porta { border-bottom: 2px solid var(--grafite); }
+.num {
+  position: relative; font: italic 900 clamp(40px, 11vw, 64px)/.9 var(--display); color: var(--arancio-testo);
+  min-width: 1.6em; padding: 4px 10px 0 2px;
+}
+/* la fascia obliqua che passa sul numero */
+.num::before {
+  content: ""; position: absolute; inset: 0 -6px 0 -10px; z-index: -1; background: var(--arancio);
+  transform: skewX(calc(var(--pendenza) * -1)) scaleX(0); transform-origin: left;
+  transition: transform .5s var(--esci);
+}
+.porta h2 {
+  margin: 4px 0 0; font: italic 900 clamp(24px, 6.4vw, 38px)/1 var(--display);
+  text-transform: uppercase; color: var(--nero);
+}
+.stato {
+  display: inline-block; margin-top: 10px; font: italic 800 12px/1 var(--display);
+  text-transform: uppercase; letter-spacing: .08em; color: var(--arancio-testo);
+}
+.porta p { margin: 10px 0 0; max-width: 46ch; font-size: 16px; line-height: 1.55; }
+.azione {
+  display: flex; width: fit-content; align-items: center; gap: 10px; margin-top: 16px;
+  font: italic 800 15px/1 var(--display); text-transform: uppercase; color: var(--nero);
+  border-bottom: 2px solid var(--arancio); padding-bottom: 6px;
+}
+.freccia { width: 20px; height: 20px; flex: none; color: var(--arancio); transition: transform .45s var(--esci); }
+.porta:hover .num::before, .porta:focus-visible .num::before, .porta:active .num::before, .porta.far .num::before { transform: skewX(calc(var(--pendenza) * -1)) scaleX(1); }
+.porta:hover .num, .porta:focus-visible .num, .porta:active .num { color: var(--nero); }
+.porta:hover .freccia, .porta:focus-visible .freccia { transform: translateX(6px); }
+.porta:focus-visible { outline-offset: -6px; }
+
+/* la prima porta: FAR Training, sul nero */
+.porta.far { background: var(--nero); color: #E4E1DC; border-top-color: var(--nero); }
+.porta.far .num { color: var(--nero); }
+.porta.far h2 { color: #fff; }
+.porta.far .stato { color: var(--arancio); }
+.porta.far .azione { color: #fff; }
+.motto { display: block; margin-top: 12px; font: italic 800 13px/1.3 var(--display); text-transform: uppercase; color: #A8A49E; letter-spacing: .02em; }
+
+/* i nove movimenti delle guide */
+.mosse { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 0; margin: 14px 0 0; padding: 0; max-width: 52ch; }
+.mosse li { font: italic 800 12px/1.4 var(--display); text-transform: uppercase; color: var(--grafite); }
+.mosse li { white-space: nowrap; }
+.mosse li:not(:last-child)::after { content: "/"; margin: 0 8px; color: var(--arancio); font-style: normal; }
+
+/* piede */
+.piede {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;
+  padding: 34px var(--margine) 40px; font-size: 14px; color: var(--tenue);
+}
+.piede a {
+  font: italic 900 20px/1 var(--display); text-transform: uppercase; color: var(--nero);
+  text-decoration: none; border-bottom: 2px solid var(--arancio); padding-bottom: 4px;
+}
+.piede a:hover { color: var(--arancio-testo); }
+.testa { width: 34px; height: auto; }
+
+@keyframes fascia { from { transform: skewX(calc(var(--pendenza) * -1)) scaleX(0); } }
+.porta.far .num::before { animation: fascia .9s .35s var(--esci) backwards; }
+
+/* desktop: il ritratto a sinistra, le porte a destra */
+@media (min-width: 900px) {
+  .testata .logo img { height: 46px; }
+  .pagina { grid-template-columns: 5fr 7fr; align-items: start; }
+  .ritratto { position: sticky; top: 0; height: 100vh; }
+  .ritratto img { height: 100%; aspect-ratio: auto; object-position: 50% 22%; }
+  .ritratto::after { top: 0; bottom: 0; left: auto; right: -1px; width: 17.6vh; height: auto; max-height: none;
+    clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .colonna { padding-top: 44px; }
+  .presenta { margin-top: 0; }
+  .porte { margin-top: 44px; }
+  .porta { grid-template-columns: 110px 1fr auto; padding-top: 30px; padding-bottom: 32px; }
+}
+@media (min-width: 1300px) {
+  .presenta h1 { font-size: 96px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { transition: none !important; animation: none !important; }
+}
